@@ -1,0 +1,112 @@
+/* 1. 기본 스타일 초기화 및 전체 레이아웃 설정 */
+*, *::before, *::after {
+    box-sizing: border-box; /* 레이아웃 계산을 쉽게 만듭니다 */
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    /* (수정) 더 깔끔한 시스템 폰트 사용 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", sans-serif;
+    background-color: #f7f9fc; /* (수정) 더 부드러운 배경색 */
+    color: #333;
+}
+
+body {
+    display: flex;
+    justify-content: center; /* 수평 중앙 */
+    align-items: center;    /* 수직 중앙 */
+    text-align: center;
+    flex-direction: column; /* 아이템을 세로로 쌓음 */
+    padding: 20px; /* 화면 가장자리와 콘텐츠 간 여백 */
+}
+
+/* 2. 헤더 (타이틀) */
+header {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+}
+
+header h1 {
+    font-size: 1.8rem; /* (수정) 타이틀을 더 강조 */
+    font-weight: 700;
+    color: #2c3e50; /* (수정) 더 진하고 전문적인 색상 */
+    margin: 0;
+}
+
+/* 3. 필터 버튼 (우측 상단) */
+.filter-button {
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    
+    /* (수정) 버튼 디자인 변경 */
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    color: #555;
+    padding: 8px 16px;
+    border-radius: 20px; /* 둥근 모양 */
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 약간의 그림자 */
+}
+
+.filter-button:hover {
+    background-color: #f9f9f9;
+    border-color: #ccc;
+}
+
+/* 4. 메인 컨텐츠 영역 */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px; /* 헤더와 겹치지 않게 여백 */
+}
+
+/* 5. 메인 버튼 (핵심 디자인) */
+.main-button {
+    font-size: 1.75rem; /* (수정) 더 크고 시원하게 */
+    font-weight: bold;
+    padding: 25px 50px; /* (수정) 터치하기 쉬운 크기 */
+    margin-top: 20px;
+    cursor: pointer;
+    color: white;
+    border: none;
+    border-radius: 50px; /* (수정) 완전한 캡슐 모양 */
+    
+    /* (수정) 매력적인 그라데이션 배경 */
+    background-image: linear-gradient(45deg, #2ecc71, #1abc9c); /* 녹색 계열 */
+    
+    /* (수정) 입체감을 위한 그림자 */
+    box-shadow: 0 8px 15px rgba(46, 204, 113, 0.3);
+    
+    transition: all 0.3s ease; /* 부드러운 애니메이션 */
+}
+
+.main-button:hover {
+    /* (수정) 마우스를 올리면 살짝 떠오르는 효과 */
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px rgba(46, 204, 113, 0.4);
+}
+
+.main-button:active {
+    /* (수정) 클릭 시 눌리는 효과 */
+    transform: translateY(1px);
+    box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
+}
+
+/* 6. 결과 영역 */
+#result-area {
+    margin-top: 60px; /* (수정) 버튼과의 간격을 더 확보 */
+    font-size: 1.5rem; /* (수정) 결과 텍스트 강조 */
+    font-weight: 600;
+    color: #1abc9c; /* (수정) 메인 테마 색상과 통일 */
+    min-height: 1.5em; /* 결과가 없을 때도 높이 유지 */
+    
+    /* (추가) 결과가 나타날 때 부드럽게 표시 */
+    transition: opacity 0.5s ease-in-out;
+}
