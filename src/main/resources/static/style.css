@@ -133,7 +133,7 @@ main {
     border-bottom: 3px solid #1abc9c; 
 }
 
-/* --- 11. (수정) 탭 콘텐츠 영역 (카드 정렬) --- */
+/* --- 11. 탭 콘텐츠 영역 (카드 정렬) --- */
 .tab-content {
     padding: 20px;
     min-height: 150px;
@@ -142,10 +142,8 @@ main {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
     gap: 20px; 
-
-    /* --- (이하 2줄이 수정/추가됩니다) --- */
-    max-height: 50vh; /* (추가) 최대 높이를 뷰포트(화면)의 50%로 제한 */
-    overflow-y: auto; /* (추가) 내용이 넘치면 이 영역만 스크롤바 생성 */
+    max-height: 50vh; 
+    overflow-y: auto; 
 }
 
 /* --- 12. 정보 카드 --- */
@@ -155,6 +153,7 @@ main {
     box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
     overflow: hidden; 
     transition: transform 0.2s ease;
+    cursor: pointer; /* (추가) 클릭 가능하다는 것을 표시 */
 }
 .info-card:hover {
     transform: translateY(-5px); 
@@ -197,17 +196,46 @@ main {
     justify-content: center;
     align-items: center;
     z-index: 1000; 
+    /* (추가) 부드럽게 나타나도록 */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
+/* (추가) 모달을 띄울 때 (JS에서 display: flex 대신 이 클래스를 사용) */
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+
 /* --- 18. 모달 콘텐츠 (실제 팝업창) --- */
 .modal-content {
     background-color: #ffffff;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    width: 80%;
-    max-width: 400px; 
+    width: 90%; /* (수정) 모바일 대응 */
+    max-width: 450px; /* (수정) 상세 모달은 조금 더 커도 됨 */
     text-align: center;
 }
+
+/* (수정) 상세 모달 내부 텍스트는 좌측 정렬 */
+#detail-modal .modal-content {
+    text-align: left;
+}
+
+#detail-modal .modal-content h2 {
+    text-align: center; /* 제목만 중앙 정렬 */
+}
+#detail-modal .modal-content p {
+    text-align: center; /* 카테고리도 중앙 정렬 */
+    color: #888;
+    font-size: 0.9rem;
+    margin-top: -10px;
+}
+
+
 .modal-content h2 {
     margin-top: 0;
     color: #2c3e50;
@@ -241,9 +269,76 @@ main {
     margin-top: 20px;
     padding: 10px 30px;
     font-size: 1rem;
-    background-color: #007bff; 
+    background-color: #555; /* (수정) 덜 중요해 보이게 회색 계열 */
     color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
+    transition: background-color 0.2s;
+}
+.modal-close-button:hover {
+    background-color: #333;
+}
+
+
+/* --- (이하 코드를 파일 맨 아래에 추가) --- */
+
+/* --- 22. (추가) 상세 모달: 이미지 --- */
+.detail-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background-color: #eee;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* --- 23. (추가) 상세 모달: 정보 그리드 (주소, 전화번호) --- */
+.detail-info-grid {
+    display: grid;
+    grid-template-columns: auto 1fr; /* 아이콘/라벨 + 내용 */
+    gap: 15px 10px; /* 세로 간격, 가로 간격 */
+    margin-top: 20px;
+    text-align: left;
+    align-items: center;
+}
+.detail-info-grid span {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+.detail-info-grid p {
+    font-size: 0.95rem;
+    color: #333;
+    margin: 0;
+    text-align: left; /* P태그 중앙 정렬 초기화 */
+}
+
+/* --- 24. (추가) 상세 모달: 카카오맵 버튼 --- */
+.kakao-map-button {
+    display: block; /* 버튼처럼 보이게 */
+    width: 100%;
+    padding: 12px;
+    margin-top: 25px;
+    background-color: #FEE500; /* 카카오 노란색 */
+    color: #191919;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: opacity 0.2s;
+}
+.kakao-map-button:hover {
+    opacity: 0.8;
+}
+
+/* --- 25. (추가) 상세 모달: 닫기 버튼을 중앙 정렬 --- */
+#detail-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+}
+#detail-modal .modal-close-button {
+    width: 100px; /* 닫기 버튼 크기 줄이기 */
+    align-self: center; /* 버튼만 중앙 정렬 */
 }

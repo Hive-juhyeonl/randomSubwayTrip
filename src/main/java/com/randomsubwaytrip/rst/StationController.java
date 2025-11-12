@@ -48,12 +48,9 @@ public class StationController {
             filteredStations = stationRepository.findAll();
         }
         
-        // (중요) 필터링된 역이 없는 경우 (예: "09호선"을 골랐는데 DB에 9호선이 없는 경우)
         if (filteredStations.isEmpty()) {
-            filteredStations = stationRepository.findAll(); // 전체에서 다시 뽑기
-            // DB 자체가 비어있는지 마지막으로 확인
+            filteredStations = stationRepository.findAll(); 
             if (filteredStations.isEmpty()) {
-                // 이 오류가 나면 DataInitializer가 문제임
                 throw new RuntimeException("DB에 역 정보가 없습니다. DataInitializer를 확인하세요.");
             }
         }
@@ -127,7 +124,8 @@ public class StationController {
                 item.put("phone", doc.path("phone").asText("전화번호 정보 없음"));
                 item.put("placeUrl", doc.path("place_url").asText()); 
                 
-                String imageUrl = "https://via.placeholder.com/300x200?text=" + title.substring(0, Math.min(title.length(), 5));
+                // (수정) 403 오류를 피하기 위해 다른 임시 이미지 서비스(placehold.co)로 변경
+                String imageUrl = "https://placehold.co/300x200/EFEFEF/999?text=" + title.substring(0, Math.min(title.length(), 5));
                 item.put("imageUrl", imageUrl);
 
                 results.add(item);
