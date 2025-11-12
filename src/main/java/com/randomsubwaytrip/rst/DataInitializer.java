@@ -46,7 +46,6 @@ public class DataInitializer implements CommandLineRunner {
             
             URI apiUrl = UriComponentsBuilder
                     .fromUriString(baseUrl)
-                    // (수정) {lineName}을 경로에서 제거
                     .path("/{apiKey}/json/SearchSTNBySubwayLineInfo/1/1000/") 
                     // (수정) 쿼리 파라미터로 LINE_NUM 추가
                     .queryParam("LINE_NUM", lineName) 
@@ -57,19 +56,17 @@ public class DataInitializer implements CommandLineRunner {
             try {
                 JsonNode response = restTemplate.getForObject(apiUrl, JsonNode.class);
 
-                // API 키가 틀렸거나 서비스가 잘못되었을 때의 최상위 에러
                 JsonNode rootResult = response.path("RESULT");
                 if (!rootResult.isMissingNode()) {
                     System.err.println("[DataInitializer] API 오류 (Root): " + rootResult.path("MESSAGE").asText());
-                    continue; // 다음 호선으로
+                    continue; 
                 }
 
-                // 정상 응답이지만, 그 안의 RESULT 확인 (예: "해당하는 데이터가 없습니다")
                 JsonNode mainNode = response.path("SearchSTNBySubwayLineInfo");
                 JsonNode dataResult = mainNode.path("RESULT");
                 if (!dataResult.path("CODE").asText().equals("INFO-000")) {
                      System.err.println("[DataInitializer] API 오류: " + dataResult.path("MESSAGE").asText());
-                     continue; // 다음 호선으로
+                     continue; 
                 }
                 
                 JsonNode rows = mainNode.path("row");
