@@ -1,40 +1,140 @@
-// "오늘 어디 갈까?" 버튼(id: randomBtn)을 찾습니다.
+// --- 1. 전역 변수 ---
 const randomButton = document.getElementById('randomBtn');
-        
-// 결과 표시 영역(id: result-area)을 찾습니다.
 const resultArea = document.getElementById('result-area');
+const filterButton = document.getElementById('filterBtn');
+const tabsContainer = document.getElementById('station-info-tabs');
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContent = document.getElementById('tab-content');
+const filterModal = document.getElementById('filter-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const lineOptions = document.querySelector('.line-options'); 
 
-// 버튼 클릭 이벤트를 등록합니다.
+let currentStationName = '';
+let currentLineFilter = '전체';
+let areLinesLoaded = false; 
+
+// --- 2. "랜덤 뽑기" 버튼 이벤트 ---
 randomButton.addEventListener('click', () => {
-    // 버튼을 누르면 이 함수가 실행됩니다.
-    
-    // 1. 결과 영역을 "뽑는 중..."으로 바꿉니다.
-    resultArea.textContent = '역을 뽑는 중...';
+    resultArea.textContent = '역을 뽑는 중...'; // (이 부분은 textContent 유지)
+    tabsContainer.style.display = 'none';
+    tabContent.innerHTML = '';
+    const apiUrl = `/api/stations/random?line=${currentLineFilter}`;
 
-    // 2. Spring Boot 컨트롤러 API(/api/stations/random)를 호출합니다.
-    fetch('/api/stations/random')
+    fetch(apiUrl)
         .then(response => {
-            // 3. API 서버가 응답하면, 그 내용을 JSON 객체로 변환합니다.
-            if (!response.ok) {
-                throw new Error('API 호출에 실패했습니다.');
-            }
+            if (!response.ok) throw new Error('API 호출에 실패했습니다.');
             return response.json();
         })
         .then(data => {
-            // 4. JSON 변환이 성공하면, 화면에 역 정보를 표시합니다.
-            // (data 객체 예: { "name": "강남역", "line": "2호선" })
-            resultArea.textContent = 
-                `당신의 역은 [${data.line}] ${data.name} 입니다!`;
+            currentStationName = data.name;
+
+            // --- (이 부분이 수정되었습니다) ---
+            // 1. textContent 대신 innerHTML을 사용합니다.
+            // 2. data.name 뒤에 "역"을 추가합니다.
+            // 3. 역 이름 부분을 <span class="station-name">으로 감싸서 CSS가 적용되게 합니다.
+            resultArea.innerHTML = 
+                `당신의 역은 [${data.line}] <span class="station-name">${currentStationName}역</span> 입니다!`;
+            // --- (수정 끝) ---
+
+            tabsContainer.style.display = 'block';
+
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            const firstTab = tabButtons[0];
+            firstTab.classList.add('active');
+            loadTabContent(firstTab.getAttribute('data-tab'));
         })
         .catch(error => {
-            // 5. 중간에 오류가 발생하면, 에러 메시지를 표시합니다.
             console.error('오류 발생:', error);
             resultArea.textContent = '오류가 발생했습니다. 다시 시도해 주세요.';
         });
 });
 
-// (참고) 필터 버튼은 아직 아무 기능도 하지 않습니다.
-const filterButton = document.getElementById('filterBtn');
+// --- 3. 탭 버튼 클릭 이벤트 (동일) ---
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        const tabType = button.getAttribute('data-tab');
+        loadTabContent(tabType);
+    });
+});
+
+// --- 4. 탭 콘텐츠 로드 함수 (동일) ---
+function loadTabContent(tabType) {
+    if (currentStationName === '') return;
+    tabContent.innerHTML = '불러오는 중...'; 
+    fetch(`/api/stations/${currentStationName}/${tabType}`)
+        .then(response => {
+            if (!response.ok) throw new Error('데이터 로드 실패');
+            return response.json();
+        })
+        .then(data => {
+            tabContent.innerHTML = '';
+            if (data.length === 0) {
+                tabContent.textContent = '표시할 정보가 없습니다.';
+                return;
+            }
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'info-card';
+                card.innerHTML = `
+                    <img src="${item.imageUrl}" alt="${item.title}" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">${item.title}</h3>
+                        <p class="card-description">${item.description}</p>
+                    </div>
+                `;
+                tabContent.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error('탭 콘텐츠 로드 오류:', error);
+            tabContent.innerHTML = '정보를 불러오는 데 실패했습니다.';
+        });
+}
+
+// --- 5. 필터 버튼 이벤트 (동일) ---
 filterButton.addEventListener('click', () => {
-    alert('필터 기능은 아직 개발 중입니다.');
+    if (areLinesLoaded === false) {
+        fetch('/api/stations/lines')
+            .then(response => response.json())
+            .then(lines => {
+                lines.forEach(line => {
+                    const button = document.createElement('button');
+                    button.className = 'line-button';
+                    button.setAttribute('data-line', line); 
+                    button.textContent = line; 
+                    lineOptions.appendChild(button);
+                });
+                areLinesLoaded = true;
+                filterModal.style.display = 'flex';
+            })
+            .catch(error => {
+                console.error('노선 목록 로드 실패:', error);
+                alert('노선 목록을 불러오는 데 실패했습니다.');
+            });
+    } else {
+        filterModal.style.display = 'flex';
+    }
+});
+
+// --- 6. 모달 닫기 이벤트 (동일) ---
+closeModalBtn.addEventListener('click', () => {
+    filterModal.style.display = 'none';
+});
+
+filterModal.addEventListener('click', (event) => {
+    if (event.target === filterModal) {
+        filterModal.style.display = 'none';
+    }
+});
+
+// --- 7. 모달 노선 버튼 클릭 이벤트 (동일) ---
+lineOptions.addEventListener('click', (event) => {
+    if (event.target.classList.contains('line-button')) {
+        const selectedLine = event.target.getAttribute('data-line');
+        currentLineFilter = selectedLine;
+        filterButton.textContent = `필터 (${selectedLine})`;
+        filterModal.style.display = 'none';
+    }
 });

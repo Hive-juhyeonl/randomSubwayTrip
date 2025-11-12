@@ -1,112 +1,249 @@
-/* 1. 기본 스타일 초기화 및 전체 레이아웃 설정 */
+/* --- 1. 기본 스타일 초기화 및 전체 레이아웃 --- */
 *, *::before, *::after {
-    box-sizing: border-box; /* 레이아웃 계산을 쉽게 만듭니다 */
+    box-sizing: border-box;
 }
-
 html, body {
     height: 100%;
     margin: 0;
-    /* (수정) 더 깔끔한 시스템 폰트 사용 */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", sans-serif;
-    background-color: #f7f9fc; /* (수정) 더 부드러운 배경색 */
+    background-color: #f7f9fc;
     color: #333;
 }
-
 body {
     display: flex;
-    justify-content: center; /* 수평 중앙 */
-    align-items: center;    /* 수직 중앙 */
+    justify-content: center; 
+    align-items: center;    
     text-align: center;
-    flex-direction: column; /* 아이템을 세로로 쌓음 */
-    padding: 20px; /* 화면 가장자리와 콘텐츠 간 여백 */
+    flex-direction: column; 
+    padding: 20px;
 }
 
-/* 2. 헤더 (타이틀) */
+/* --- 2. 헤더 (타이틀) --- */
 header {
     position: absolute;
     top: 40px;
     left: 0;
     right: 0;
 }
-
 header h1 {
-    font-size: 1.8rem; /* (수정) 타이틀을 더 강조 */
+    font-size: 1.8rem;
     font-weight: 700;
-    color: #2c3e50; /* (수정) 더 진하고 전문적인 색상 */
+    color: #2c3e50;
     margin: 0;
 }
 
-/* 3. 필터 버튼 (우측 상단) */
+/* --- 3. 필터 버튼 (우측 상단) --- */
 .filter-button {
     position: absolute;
     top: 40px;
     right: 20px;
-    
-    /* (수정) 버튼 디자인 변경 */
     background-color: #ffffff;
     border: 1px solid #ddd;
     color: #555;
     padding: 8px 16px;
-    border-radius: 20px; /* 둥근 모양 */
+    border-radius: 20px; 
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 약간의 그림자 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
 }
-
 .filter-button:hover {
     background-color: #f9f9f9;
     border-color: #ccc;
 }
 
-/* 4. 메인 컨텐츠 영역 */
+/* --- 4. 메인 컨텐츠 영역 --- */
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 60px; /* 헤더와 겹치지 않게 여백 */
+    padding-top: 60px; 
 }
 
-/* 5. 메인 버튼 (핵심 디자인) */
+/* --- 5. 메인 버튼 (핵심 디자인) --- */
 .main-button {
-    font-size: 1.75rem; /* (수정) 더 크고 시원하게 */
+    font-size: 1.75rem; 
     font-weight: bold;
-    padding: 25px 50px; /* (수정) 터치하기 쉬운 크기 */
+    padding: 25px 50px; 
     margin-top: 20px;
     cursor: pointer;
     color: white;
     border: none;
-    border-radius: 50px; /* (수정) 완전한 캡슐 모양 */
-    
-    /* (수정) 매력적인 그라데이션 배경 */
-    background-image: linear-gradient(45deg, #2ecc71, #1abc9c); /* 녹색 계열 */
-    
-    /* (수정) 입체감을 위한 그림자 */
+    border-radius: 50px; 
+    background-image: linear-gradient(45deg, #2ecc71, #1abc9c); 
     box-shadow: 0 8px 15px rgba(46, 204, 113, 0.3);
-    
-    transition: all 0.3s ease; /* 부드러운 애니메이션 */
+    transition: all 0.3s ease; 
 }
-
 .main-button:hover {
-    /* (수정) 마우스를 올리면 살짝 떠오르는 효과 */
     transform: translateY(-3px);
     box-shadow: 0 12px 20px rgba(46, 204, 113, 0.4);
 }
-
 .main-button:active {
-    /* (수정) 클릭 시 눌리는 효과 */
     transform: translateY(1px);
     box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
 }
 
-/* 6. 결과 영역 */
+/* --- 6. 결과 영역 --- */
 #result-area {
-    margin-top: 60px; /* (수정) 버튼과의 간격을 더 확보 */
-    font-size: 1.5rem; /* (수정) 결과 텍스트 강조 */
+    margin-top: 60px;
+    font-size: 1.5rem; 
     font-weight: 600;
-    color: #1abc9c; /* (수정) 메인 테마 색상과 통일 */
-    min-height: 1.5em; /* 결과가 없을 때도 높이 유지 */
-    
-    /* (추가) 결과가 나타날 때 부드럽게 표시 */
+    color: #333; 
+    min-height: 1.5em; 
     transition: opacity 0.5s ease-in-out;
+}
+
+/* --- 7. 결과 영역의 역 이름 (span.station-name) --- */
+.station-name {
+    color: #1abc9c; 
+    font-size: 1.6rem; 
+    margin: 0 4px; 
+}
+
+/* --- 8. 탭 컨테이너 --- */
+.tabs-container {
+    width: 90%; 
+    max-width: 600px; 
+    margin-top: 30px; 
+    background-color: #ffffff; 
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden; 
+}
+/* --- 9. 탭 네비게이션 (버튼 3개 감싸기) --- */
+.tab-nav {
+    display: flex; 
+    border-bottom: 1px solid #eee; 
+}
+/* --- 10. 탭 버튼 --- */
+.tab-button {
+    flex: 1; 
+    padding: 15px 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #888; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s, border-bottom 0.2s;
+    border-bottom: 3px solid transparent; 
+}
+.tab-button.active {
+    color: #1abc9c; 
+    border-bottom: 3px solid #1abc9c; 
+}
+
+/* --- 11. (수정) 탭 콘텐츠 영역 (카드 정렬) --- */
+.tab-content {
+    padding: 20px;
+    min-height: 150px;
+    line-height: 1.6;
+    color: #333;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 20px; 
+
+    /* --- (이하 2줄이 수정/추가됩니다) --- */
+    max-height: 50vh; /* (추가) 최대 높이를 뷰포트(화면)의 50%로 제한 */
+    overflow-y: auto; /* (추가) 내용이 넘치면 이 영역만 스크롤바 생성 */
+}
+
+/* --- 12. 정보 카드 --- */
+.info-card {
+    background-color: #fdfdfd; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+    overflow: hidden; 
+    transition: transform 0.2s ease;
+}
+.info-card:hover {
+    transform: translateY(-5px); 
+}
+/* --- 13. 카드 이미지 --- */
+.card-image {
+    width: 100%; 
+    height: 150px; 
+    object-fit: cover; 
+    background-color: #eee; 
+}
+/* --- 14. 카드 콘텐츠 (텍스트 영역) --- */
+.card-content {
+    padding: 15px;
+    text-align: left; 
+}
+/* --- 15. 카드 제목 --- */
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 8px 0; 
+}
+/* --- 16. 카드 설명 --- */
+.card-description {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+}
+
+/* --- 17. 모달 오버레이 (검은색 반투명 배경) --- */
+.modal-overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; 
+}
+/* --- 18. 모달 콘텐츠 (실제 팝업창) --- */
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    width: 80%;
+    max-width: 400px; 
+    text-align: center;
+}
+.modal-content h2 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+/* --- 19. 노선 선택 버튼 영역 --- */
+.line-options {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    gap: 10px; 
+    margin: 20px 0;
+}
+/* --- 20. 노선 버튼 --- */
+.line-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.line-button:hover {
+    background-color: #eee;
+    border-color: #ccc;
+}
+/* --- 21. 모달 닫기 버튼 --- */
+.modal-close-button {
+    margin-top: 20px;
+    padding: 10px 30px;
+    font-size: 1rem;
+    background-color: #007bff; 
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
 }
